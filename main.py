@@ -22,6 +22,7 @@ class SnakeGame:
         self.hFood, self.wFood,_ = self.imgFood.shape
         self.foodPoint = 0,0
         self.randomFoodLoc()
+        self.score = 0
     
     def randomFoodLoc(self):
         self.foodPoint = random.randint(0,1000),random.randint(0,600)
@@ -42,12 +43,27 @@ class SnakeGame:
                 self.points.pop(i)
                 if self.currLen <= self.allowedLen:
                     break
+
+        
+        rx, ry = self.foodPoint
+        if rx - self.wFood//2 < cx < rx + self.wFood//2 and ry - self.hFood//2 < cy < ry + self.hFood//2:
+            self.randomFoodLoc()
+            self.allowedLen += 40
+            self.score += 1
+
+
         if (self.points):
             for i,point in enumerate(self.  points):
                 if i !=0:
                     cv2.line(imgMain,self.points[i-1],self.points[i],(0,255,0),20)
             cv2.circle(imgMain, self.points[-1], 10, (255, 0, 255), cv2.FILLED)
         rx,ry = self.foodPoint
+        # if not (rx - self.wFood//2 < 1280 and ry - self.hFood//2 < 720):
+        #     self.randomFoodLoc()
+        print(rx - (self.wFood//2),ry - (self.hFood//2))
+        if not (rx - (self.wFood//2) > 0 and ry - (self.hFood//2) > 0):
+            self.randomFoodLoc()
+            rx,ry = self.foodPoint
         imgMain = cvzone.overlayPNG(imgMain,self.imgFood,(rx - (self.wFood//2),ry - (self.hFood//2) ))  
         return imgMain
 

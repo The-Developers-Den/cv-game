@@ -3,6 +3,7 @@ import cv2
 import numpy as np
 from cvzone.HandTrackingModule import HandDetector
 import math
+import random
 
 cap = cv2.VideoCapture(0)
 cap.set(3, 1280)
@@ -11,12 +12,19 @@ cap.set(4, 720)
 detector = HandDetector(detectionCon=0.8, maxHands=1)
 
 class SnakeGame:
-    def __init__(self):
+    def __init__(self,pathFood="apple.png"):
         self.points = []
         self.lengths = []
         self.currLen = 0
         self.allowedLen = 150
         self.prvHead = 0,0
+        self.imgFood = cv2.imread(pathFood,cv2.IMREAD_UNCHANGED)
+        self.hFood, self.wFood,_ = self.imgFood.shape
+        self.foodPoint = 0,0
+        self.randomFoodLoc()
+    
+    def randomFoodLoc(self):
+        self.foodPoint = random.randint(0,1000),random.randint(0,600)
 
     def update(self,imgMain,currHead):
         px,py = self.prvHead
@@ -39,6 +47,8 @@ class SnakeGame:
                 if i !=0:
                     cv2.line(imgMain,self.points[i-1],self.points[i],(0,255,0),20)
             cv2.circle(imgMain, self.points[-1], 10, (255, 0, 255), cv2.FILLED)
+        rx,ry = self.foodPoint
+        imgMain = cvzone.overlayPNG(imgMain,self.imgFood,(rx - (self.wFood//2),ry - (self.hFood//2) ))  
         return imgMain
 
 game = SnakeGame()

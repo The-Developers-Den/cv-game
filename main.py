@@ -4,6 +4,14 @@ import numpy as np
 from cvzone.HandTrackingModule import HandDetector
 import math
 import random
+import pygame
+from pygame import mixer, mixer_music
+
+pygame.init()
+
+#background
+mixer.music.load('background.wav')
+# mixer.music.play(-1)
 
 cap = cv2.VideoCapture(0)
 cap.set(3, 1280)
@@ -51,6 +59,8 @@ class SnakeGame:
                         break            
             rx, ry = self.foodPoint
             if rx - self.wFood//2 < cx < rx + self.wFood//2 and ry - self.hFood//2 < cy < ry + self.hFood//2:
+                apple = mixer.Sound('applecrunch.wav')
+                apple.play()
                 self.randomFoodLoc()
                 self.allowedLen += 60
                 self.score += 1
@@ -67,6 +77,8 @@ class SnakeGame:
                 minDist = cv2.pointPolygonTest(pts,currHead,True)
                 if -0.9 <= minDist <= 0.9 :
                     self.gameOver = True
+                    gmeOver = mixer.Sound('gameover.mp3')
+                    gmeOver.play()
                     self.points = []
                     self.lengths = []
                     self.currLen = 0
@@ -96,4 +108,3 @@ while True:
         break
     if key == ord('r'):
         game.gameOver = False
- 

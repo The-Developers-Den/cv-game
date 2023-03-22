@@ -52,7 +52,7 @@ class SnakeGame:
             rx, ry = self.foodPoint
             if rx - self.wFood//2 < cx < rx + self.wFood//2 and ry - self.hFood//2 < cy < ry + self.hFood//2:
                 self.randomFoodLoc()
-                self.allowedLen += 40
+                self.allowedLen += 60
                 self.score += 1
             if (self.points):
                 for i,point in enumerate(self.  points):
@@ -74,7 +74,7 @@ class SnakeGame:
                     self.prvHead = 0,0
                     cv2.putText(imgMain,"Game Over",(100,100),cv2.FONT_HERSHEY_PLAIN,5,(0,0,255),5)    
             rx,ry = self.foodPoint
-            if not (rx - (self.wFood//2) > 0 and ry - (self.hFood//2) > 0):
+            while not (rx - (self.wFood//2) > 0 and ry - (self.hFood//2) > 0):
                 self.randomFoodLoc()
                 rx,ry = self.foodPoint
             cvzone.putTextRect(imgMain,f'Score: {self.score}',[50,80],scale=2,thickness=2,font = cv2.FONT_HERSHEY_PLAIN)
